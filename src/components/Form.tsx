@@ -2,6 +2,17 @@ import React from 'react'
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 
   //Styling
@@ -15,7 +26,13 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: theme.spacing(1),
             marginRight: theme.spacing(1),
             width: 200,
-      },
+        },
+        root: {
+            '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '25ch',
+            },
+        },
     }),
 );
 
@@ -36,9 +53,28 @@ export type RadioInputField = {
     values: string[];
 }
 
-// export type DataField =  {
-//        type: Date;
-// }  
+
+export default function RadioButtonsGroup() {
+    const [value, setValue] = React.useState('female');
+  
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValue((event.target as HTMLInputElement).value);
+    };
+
+    return (
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Gender</FormLabel>
+        <RadioGroup aria-label="gender" namen="gender1" value={value} onChange={handleChange}>
+          <FormControlLabel value="female" control={<Radio />} label="Female" />
+          <FormControlLabel value="male" control={<Radio />} label="Male" />
+          <FormControlLabel value="other" control={<Radio />} label="Other" />
+        </RadioGroup>
+      </FormControl>
+    );
+  }
+
+
+
 
 export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
 
@@ -84,7 +120,7 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                         id="date"
                         label="Birthday"
                         type="date"
-                        defaultValue="2017-05-24"
+                        // defaultValue="2017-05-24"
                         className={classes.textField}
                         InputLabelProps={{
                         shrink: true,
@@ -92,7 +128,42 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                     />
                 </form>
 
+                
+                <RadioButtonsGroup/>
+                <div> 
+                <TextField
+                    id="standard-password-input"
+                    label="Password"
+                    type="password"
+                    autoComplete="current-password"
+                />
 
+                <TextField
+                    id="standard-password-input"
+                    label="Confirm"
+                    type="password"
+                    autoComplete="current-password"
+                />
+          
+                </div> 
+                <div> 
+                <TextField
+                    type="email"
+                    label="Email"
+                    placeholder="email@sample.com"
+                />
+                </div>
+                <form className={classes.root} noValidate autoComplete="off">
+                    <div>
+                        <TextField
+                            id="standard-multiline-static"
+                            label="Additional comments"
+                            multiline
+                            rows={4}
+                            defaultValue="Please, add anything you want us to consider"
+                        />
+                    </div>
+                </form>     
             </div>
             <button>
                 {details.buttonTitle}
