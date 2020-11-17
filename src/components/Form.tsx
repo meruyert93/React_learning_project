@@ -53,6 +53,7 @@ export type RadioInputField = {
     values: string[];
 }
 
+//
 
 export default function RadioButtonsGroup() {
     const [value, setValue] = React.useState('female');
@@ -73,9 +74,6 @@ export default function RadioButtonsGroup() {
     );
   }
 
-
-
-
 export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
 
     const details =  props.formDetails;
@@ -83,11 +81,11 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
 
     console.log(details)
     return (
-        <div>
+        <div className="div-100-width">
             <h1 className="title">
                 {details.title}
             </h1>
-            <div> 
+            <div className="main-form"> 
                 
                 {details.inputFields.map((inputField) => {     
                     if (inputField.type === "text") {
@@ -109,8 +107,14 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                         id="standard-password-input"
                         label="Password"
                         type="password"
-                        defaultValue="2017-05-24"
-                        autoComplete="current-password"
+                        placeholder="Create your password"
+                        />
+                    }
+                    //Suppor
+                    if (inputField.type === "email") {
+                        return <TextField
+                        label="Email"
+                        placeholder="email@sample.com"
                         />
                     }
                 }

@@ -9,6 +9,35 @@
 
 }
 
+.main-form {
+    display: flex;
+    flex-direction: column; 
+    width: 60%;
+    margin: 0 auto;
+}
+
+.main-form .MuiTextField-root {
+    color: red;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.main-form .MuiTextField-root input {
+    color: red;
+}
+
+
+.main-form .MuiTextField-root label {
+    color: blueviolet;
+}
+
+.div-100-width {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:80%;
+    margin: 0 auto;
+}
 .inputsforName {
     display: flex;
     justify-content: space-around;
