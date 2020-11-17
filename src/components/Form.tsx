@@ -146,6 +146,12 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                         placeholder={inputField.placeholder}
                         />
                     }
+                    if (inputField.type === "radio") {
+                        return <TextField
+                        label={inputField.label}
+                        placeholder={inputField.placeholder}
+                        />
+                    }
                 }
                 )}
                  {details.radioInputFields.map((radioInputField) => {

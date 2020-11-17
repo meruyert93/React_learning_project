@@ -14,14 +14,15 @@ export class ExampleForm extends Component <{}, {}> {
         const phoneNumberInputField: InputField = {type: "number", placeholder: "Enter your phone Number", label:"Phone number"}
         const streetInputField: InputField = {type: "text", placeholder: "Enter your street", label: "Street"}
         const zipCodeInputField: InputField = {type: "number", placeholder: "Enter your zip Code", label:"Zip code"}
-        const cityCodeInputField: InputField = {type: "text", placeholder: "Enter your zip City", label:"City"}
-        const countryCodeInputField: InputField = {type: "text", placeholder: "Enter your zip Country", label:"Country"}
+        const cityCodeInputField: InputField = {type: "text", placeholder: "Enter your City", label:"City"}
+        const countryCodeInputField: InputField = {type: "text", placeholder: "Enter your Country", label:"Country"}
+        const radio1InputField: InputField = {type: "radio", placeholder: "Female", label:"Female"}
         const radioInputField: radioInputField = {type:"radio", value:["Female"] }
         const nameForm: FormDescription = {
             inputFields: 
             [nameInputField, firstNameInputField, passwordInputField, 
             emailInputField, birthDateInputField, phoneNumberInputField, 
-            streetInputField, zipCodeInputField, cityCodeInputField, countryCodeInputField],
+            streetInputField, zipCodeInputField, cityCodeInputField, countryCodeInputField, radio1InputField],
             radioInputFields: [radioInputField], 
             title: "Sign Up", 
             buttonTitle: "Submit form"}
