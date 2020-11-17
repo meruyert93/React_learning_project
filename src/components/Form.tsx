@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export type FormDescription = {
     inputFields: InputField[];
+    radioInputFields: radioInputField [];
     title: string;
     buttonTitle: string;
 }
@@ -48,12 +49,23 @@ export type InputField = {
     placeholder: string;
 }
 
-export type RadioInputField = {
+export type radioInputField = {
     type: string; // text, phone, check-box, radio
-    values: string[];
+    value: string[];
 }
 
-//
+// export type FormControlLabel = {
+//     value: string;
+//     control: string;
+//     label: string;
+// }
+
+export enum FormElementType {
+    text = "text",
+    textArea = "text-area",
+    password = "password",
+    passwordGroup = "password-group",
+  }
 
 export default function RadioButtonsGroup() {
     const [value, setValue] = React.useState('female');
@@ -89,37 +101,66 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                 
                 {details.inputFields.map((inputField) => {     
                     if (inputField.type === "text") {
-                        return <TextField label={inputField.placeholder}/>
+                        return <TextField 
+                        label={inputField.label}
+                        placeholder={inputField.placeholder}
+                        />
                     }
                     // TODO add support for input type text-area
                     if (inputField.type === 'text-area') {
                         return <TextareaAutosize
                         rowsMin={20}
-                        aria-label="Here some text"
-                        placeholder="Enter your text"
-                        defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                        ut labore et dolore magna aliqua."
+                        aria-label={inputField.label}
+                        placeholder={inputField.placeholder}
+                        defaultValue={inputField.label}
                         />
                     }
                     // TODO add support for input type password
                     if (inputField.type === 'password') {
                         return <TextField
-                        id="standard-password-input"
-                        label="Password"
-                        type="password"
-                        placeholder="Create your password"
+                        label={inputField.label}
+                        placeholder={inputField.placeholder}
                         />
                     }
-                    //Suppor
+                    //Support for input type email
                     if (inputField.type === "email") {
                         return <TextField
-                        label="Email"
-                        placeholder="email@sample.com"
+                        label={inputField.label}
+                        placeholder={inputField.placeholder}
+                        />
+                    }
+                    if  (inputField.type === "date") {
+                        return <TextField
+                        label={inputField.label}
+                        placeholder={inputField.placeholder}
+                        // defaultValue="2017-05-24"
+                        // placeholder="Enter your date"
+                        // InputLabelProps={{
+                        //     shrink: true,
+                        //     }}
+                        />
+                    }
+                    if (inputField.type === "number") {
+                        return <TextField
+                        label={inputField.label}
+                        placeholder={inputField.placeholder}
                         />
                     }
                 }
                 )}
-                <form className={classes.container} noValidate>
+                 {details.radioInputFields.map((radioInputField) => {
+                    if (radioInputField.type === "radio") {
+                        return <Radio
+                         value={radioInputField.value}
+                       
+                        />
+                    }
+
+                 } 
+                 )}
+
+
+                <form>
                     <TextField
                         id="date"
                         label="Birthday"
@@ -134,29 +175,7 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
 
                 
                 <RadioButtonsGroup/>
-                <div> 
-                <TextField
-                    id="standard-password-input"
-                    label="Password"
-                    type="password"
-                    autoComplete="current-password"
-                />
-
-                <TextField
-                    id="standard-password-input"
-                    label="Confirm"
-                    type="password"
-                    autoComplete="current-password"
-                />
-          
-                </div> 
-                <div> 
-                <TextField
-                    type="email"
-                    label="Email"
-                    placeholder="email@sample.com"
-                />
-                </div>
+       
                 <form className={classes.root} noValidate autoComplete="off">
                     <div>
                         <TextField
