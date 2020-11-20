@@ -17,13 +17,14 @@ export class ExampleForm extends Component <{}, {}> {
         const cityCodeInputField: InputField = {type: "text", placeholder: "Enter your City", label:"City"}
         const countryCodeInputField: InputField = {type: "text", placeholder: "Enter your Country", label:"Country"}
         const radio1InputField: InputField = {type: "radio", placeholder: "Female", label:"Female"}
-        const radioInputField: radioInputField = {type:"radio", value:["Female"] }
+        const radioInputField: radioInputField = {type:"radio", values:['female', 'male', 'others'], label: "Gender" }
+        const rating: radioInputField = {type:"radio", values:['yes', 'no', 'maybe later'], label: "Do you want to rate us?" }
         const nameForm: FormDescription = {
             inputFields: 
             [nameInputField, firstNameInputField, passwordInputField, 
             emailInputField, birthDateInputField, phoneNumberInputField, 
             streetInputField, zipCodeInputField, cityCodeInputField, countryCodeInputField, radio1InputField],
-            radioInputFields: [radioInputField], 
+            radioInputFields: [radioInputField, rating], 
             title: "Sign Up", 
             buttonTitle: "Submit form"}
 

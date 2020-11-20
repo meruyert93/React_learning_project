@@ -7,12 +7,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import IconButton from '@material-ui/core/IconButton';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
 
 
   //Styling
@@ -51,39 +45,18 @@ export type InputField = {
 
 export type radioInputField = {
     type: string; // text, phone, check-box, radio
-    value: string[];
+    values: string[];
+    label: string;
 }
-
-// export type FormControlLabel = {
-//     value: string;
-//     control: string;
-//     label: string;
-// }
 
 export enum FormElementType {
     text = "text",
     textArea = "text-area",
     password = "password",
     passwordGroup = "password-group",
-  }
-
-export default function RadioButtonsGroup() {
-    const [value, setValue] = React.useState('female');
-  
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValue((event.target as HTMLInputElement).value);
-    };
-
-    return (
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Gender</FormLabel>
-        <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-          <FormControlLabel value="female" control={<Radio />} label="Female" />
-          <FormControlLabel value="male" control={<Radio />} label="Male" />
-          <FormControlLabel value="other" control={<Radio />} label="Other" />
-        </RadioGroup>
-      </FormControl>
-    );
+    email = "email",
+    date = "date",
+    number = "number",
   }
 
 export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
@@ -101,7 +74,8 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                 
                 {details.inputFields.map((inputField) => {     
                     if (inputField.type === "text") {
-                        return <TextField 
+                        return <TextField
+                        type='text' 
                         label={inputField.label}
                         placeholder={inputField.placeholder}
                         />
@@ -118,6 +92,7 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                     // TODO add support for input type password
                     if (inputField.type === 'password') {
                         return <TextField
+                        type ='password'
                         label={inputField.label}
                         placeholder={inputField.placeholder}
                         />
@@ -125,28 +100,22 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                     //Support for input type email
                     if (inputField.type === "email") {
                         return <TextField
+                        type ='email'
                         label={inputField.label}
                         placeholder={inputField.placeholder}
                         />
                     }
                     if  (inputField.type === "date") {
                         return <TextField
+                        type = 'date'
                         label={inputField.label}
                         placeholder={inputField.placeholder}
-                        // defaultValue="2017-05-24"
-                        // placeholder="Enter your date"
-                        // InputLabelProps={{
-                        //     shrink: true,
-                        //     }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         />
                     }
                     if (inputField.type === "number") {
-                        return <TextField
-                        label={inputField.label}
-                        placeholder={inputField.placeholder}
-                        />
-                    }
-                    if (inputField.type === "radio") {
                         return <TextField
                         label={inputField.label}
                         placeholder={inputField.placeholder}
@@ -156,43 +125,15 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                 )}
                  {details.radioInputFields.map((radioInputField) => {
                     if (radioInputField.type === "radio") {
-                        return <Radio
-                         value={radioInputField.value}
-                       
-                        />
+                    return <FormControl component="fieldset"> <FormLabel component="legend">{radioInputField.label}</FormLabel>
+                                <RadioGroup  aria-label="gender" name="gender1"> {radioInputField.values.map((value) => {
+                                   return <FormControlLabel value={value} control={<Radio />} label={value} />
+                                    })}
+                                </RadioGroup>
+                            </FormControl>
                     }
-
                  } 
                  )}
-
-
-                <form>
-                    <TextField
-                        id="date"
-                        label="Birthday"
-                        type="date"
-                        // defaultValue="2017-05-24"
-                        className={classes.textField}
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                    />
-                </form>
-
-                
-                <RadioButtonsGroup/>
-       
-                <form className={classes.root} noValidate autoComplete="off">
-                    <div>
-                        <TextField
-                            id="standard-multiline-static"
-                            label="Additional comments"
-                            multiline
-                            rows={4}
-                            defaultValue="Please, add anything you want us to consider"
-                        />
-                    </div>
-                </form>     
             </div>
             <button>
                 {details.buttonTitle}
