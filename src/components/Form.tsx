@@ -4,10 +4,15 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Favorite from '@material-ui/icons/Favorite';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 
   //Styling
 const useStyles = makeStyles((theme: Theme) =>
@@ -117,6 +122,7 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                     }
                     if (inputField.type === "number") {
                         return <TextField
+                        type = 'number'
                         label={inputField.label}
                         placeholder={inputField.placeholder}
                         />
@@ -130,6 +136,19 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                                    return <FormControlLabel value={value} control={<Radio />} label={value} />
                                     })}
                                 </RadioGroup>
+                            </FormControl>
+                    }
+                    if(radioInputField.type === 'checkbox') {
+                    return  <FormControl component="fieldset">  <FormLabel component="legend">{radioInputField.label}</FormLabel>
+                            <FormGroup row> 
+                                {radioInputField.values.map((value) => {
+                                    return   <FormControlLabel
+                                    label={value}
+                                    control={<Checkbox />}
+                                    value={value}
+                                    /> 
+                                })}
+                            </FormGroup>
                             </FormControl>
                     }
                  } 
