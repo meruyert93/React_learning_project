@@ -9,6 +9,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import Box from '@material-ui/core/Box';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Favorite from '@material-ui/icons/Favorite';
@@ -79,11 +80,15 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                 
                 {details.inputFields.map((inputField) => {     
                     if (inputField.type === "text") {
-                        return <TextField
+                        return <Box 
+                        display="inline-flex"
+                        flexWrap="nowrap"
+                        > <TextField
                         type='text' 
                         label={inputField.label}
                         placeholder={inputField.placeholder}
                         />
+                        </Box>
                     }
                     // TODO add support for input type text-area
                     if (inputField.type === 'text-area') {
@@ -96,19 +101,30 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                     }
                     // TODO add support for input type password
                     if (inputField.type === 'password') {
-                        return <TextField
+                        return <FormGroup row> 
+                        <TextField
                         type ='password'
                         label={inputField.label}
                         placeholder={inputField.placeholder}
                         />
+                        <TextField
+                        type ='password'
+                        label={inputField.label}
+                        placeholder={inputField.placeholder}
+                        />
+                        </FormGroup>
                     }
                     //Support for input type email
                     if (inputField.type === "email") {
-                        return <TextField
+                        return <Box 
+                        display="inline-flex"
+                        flexWrap="nowrap"
+                        ><TextField
                         type ='email'
                         label={inputField.label}
                         placeholder={inputField.placeholder}
                         />
+                        </Box>
                     }
                     if  (inputField.type === "date") {
                         return <TextField
@@ -121,11 +137,15 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                         />
                     }
                     if (inputField.type === "number") {
-                        return <TextField
+                        return <Box 
+                        display="inline-flex"
+                        flexWrap="nowrap"
+                        > <TextField
                         type = 'number'
                         label={inputField.label}
                         placeholder={inputField.placeholder}
                         />
+                        </Box>
                     }
                 }
                 )}

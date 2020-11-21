@@ -22,8 +22,8 @@ export class ExampleForm extends Component <{}, {}> {
         const checkbox: radioInputField = {type:"checkbox", values: ['yes', 'no'], label: "do you want to follow us?"}
         const nameForm: FormDescription = {
             inputFields: 
-            [nameInputField, firstNameInputField, passwordInputField, 
-            emailInputField, birthDateInputField, phoneNumberInputField, 
+            [nameInputField, firstNameInputField, birthDateInputField, passwordInputField, 
+            emailInputField, phoneNumberInputField, 
             streetInputField, zipCodeInputField, cityCodeInputField, countryCodeInputField, radio1InputField],
             radioInputFields: [radioInputField, rating, checkbox], 
             title: "Sign Up", 
