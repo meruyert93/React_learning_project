@@ -1,21 +1,22 @@
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+
+import Box from '@material-ui/core/Box';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import Favorite from '@material-ui/icons/Favorite';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormLabel from '@material-ui/core/FormLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import React from 'react'
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
-import Box from '@material-ui/core/Box';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 
-  //Styling
+//Styling
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
@@ -37,15 +38,31 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export type FormDescription = {
-    inputFields: InputField[];
+    inputFields: Field[];
     radioInputFields: radioInputField [];
     title: string;
     buttonTitle: string;
 }
 
+export type FormDescriptionRow = {
+    inputFields: Field[][];
+    title: string;
+    buttonTitle: string;
+}
+
+export type Field = {
+    type: string;
+}
+
 export type InputField = {
     type: string; // text, phone, check-box, radio, text-area
     label: string;
+    placeholder: string;
+}
+
+export type PasswordGroupField = {
+    type: string; // text, phone, check-box, radio, text-area
+    label: string[];
     placeholder: string;
 }
 
@@ -63,6 +80,8 @@ export enum FormElementType {
     email = "email",
     date = "date",
     number = "number",
+    radio = "radio",
+    checkbox = "checkbox"
   }
 
 export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
@@ -78,20 +97,20 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
             </h1>
             <div className="main-form"> 
                 
-                {details.inputFields.map((inputField) => {     
-                    if (inputField.type === "text") {
-                        return <Box 
-                        display="inline-flex"
-                        flexWrap="nowrap"
-                        > <TextField
+                {details.inputFields.map((field) => {     
+                    if (field.type === FormElementType.text) {
+                        const inputField = field as InputField;
+                        return <div style={{display: "flex" , width: "40%"}}>
+                  
+                        <TextField
                         type='text' 
                         label={inputField.label}
                         placeholder={inputField.placeholder}
-                        />
-                        </Box>
+                        /></div>
                     }
                     // TODO add support for input type text-area
-                    if (inputField.type === 'text-area') {
+                    if (field.type === FormElementType.textArea) {
+                        const inputField = field as InputField
                         return <TextareaAutosize
                         rowsMin={20}
                         aria-label={inputField.label}
@@ -100,22 +119,26 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                         />
                     }
                     // TODO add support for input type password
-                    if (inputField.type === 'password') {
-                        return <FormGroup row> 
-                        <TextField
-                        type ='password'
-                        label={inputField.label}
-                        placeholder={inputField.placeholder}
-                        />
-                        <TextField
-                        type ='password'
-                        label={inputField.label}
-                        placeholder={inputField.placeholder}
-                        />
-                        </FormGroup>
+                    if (field.type === FormElementType.passwordGroup) {
+                        const inputField = field as PasswordGroupField
+                        return  <div style={{display: "flex", width: "100%"}}>
+                            {/* <FormGroup row>  */}
+                            <TextField
+                            type ='password'
+                            label={inputField.label[0]}
+                            placeholder={inputField.placeholder}
+                            />
+                            <TextField
+                            type ='password'
+                            label={inputField.label[1]}
+                            placeholder={inputField.placeholder}
+                            />
+                            {/* </FormGroup> */}
+                        </div>
                     }
                     //Support for input type email
-                    if (inputField.type === "email") {
+                    if (field.type === FormElementType.email) {
+                        const inputField = field as InputField
                         return <Box 
                         display="inline-flex"
                         flexWrap="nowrap"
@@ -126,7 +149,8 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                         />
                         </Box>
                     }
-                    if  (inputField.type === "date") {
+                    if  (field.type === FormElementType.date) {
+                        const inputField = field as InputField
                         return <TextField
                         type = 'date'
                         label={inputField.label}
@@ -136,7 +160,8 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                         }}
                         />
                     }
-                    if (inputField.type === "number") {
+                    if (field.type === FormElementType.number) {
+                        const inputField = field as InputField
                         return <Box 
                         display="inline-flex"
                         flexWrap="nowrap"
@@ -150,7 +175,7 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                 }
                 )}
                  {details.radioInputFields.map((radioInputField) => {
-                    if (radioInputField.type === "radio") {
+                    if (radioInputField.type === FormElementType.radio) {
                     return <FormControl component="fieldset"> <FormLabel component="legend">{radioInputField.label}</FormLabel>
                                 <RadioGroup  aria-label="gender" name="gender1"> {radioInputField.values.map((value) => {
                                    return <FormControlLabel value={value} control={<Radio />} label={value} />
@@ -158,7 +183,7 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
                                 </RadioGroup>
                             </FormControl>
                     }
-                    if(radioInputField.type === 'checkbox') {
+                    if(radioInputField.type === FormElementType.checkbox) {
                     return  <FormControl component="fieldset">  <FormLabel component="legend">{radioInputField.label}</FormLabel>
                             <FormGroup row> 
                                 {radioInputField.values.map((value) => {
@@ -180,3 +205,117 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
         </div>
     )
 }
+
+export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props) => {
+    const details =  props.formDetails;
+    const classes = useStyles();
+    return (
+        <div className="div-100-width">
+            <h1 className="title">
+                {details.title}
+            </h1>
+            <div className="main-form"> 
+                {/* [1, 2, 3, 4]
+                [[1, 2], [3], [4]] */}
+                {details.inputFields.map((row) => {    
+                    return <div style={{display:"flex", margin: "10px", alignItems:"stretch", width: "100%"}}> 
+                                {row.map((field) => {
+                                if (field.type === FormElementType.text) {
+                                    const inputField = field as InputField;
+                                    return <div style={{display: "flex" , width: "40%"}}>
+                                                <TextField
+                                                type='text' 
+                                                label={inputField.label}
+                                                placeholder={inputField.placeholder}
+                                                />
+                                            </div>
+                                }
+                                // TODO add support for input type text-area
+                                if (field.type === FormElementType.textArea) {
+                                    const inputField = field as InputField
+                                    return <TextareaAutosize
+                                            rowsMin={20}
+                                            aria-label={inputField.label}
+                                            placeholder={inputField.placeholder}
+                                            defaultValue={inputField.label}
+                                            />
+                                }
+                                // TODO add support for input type password
+                                if (field.type === FormElementType.passwordGroup) {
+                                    const inputField = field as PasswordGroupField
+                                    return  <div style={{display: "flex", width: "100%"}}>
+                                                <TextField
+                                                type ='password'
+                                                label={inputField.label[0]}
+                                                placeholder={inputField.placeholder}
+                                                />
+                                                <TextField
+                                                type ='password'
+                                                label={inputField.label[1]}
+                                                placeholder={inputField.placeholder}
+                                                />
+                                            </div>
+                                }
+                                //Support for input type email
+                                if (field.type === FormElementType.email) {
+                                    const inputField = field as InputField
+                                    return <TextField
+                                            type ='email'
+                                            label={inputField.label}
+                                            placeholder={inputField.placeholder}
+                                            />
+                                }
+                                if  (field.type === FormElementType.date) {
+                                    const inputField = field as InputField
+                                    return <TextField
+                                            type = 'date'
+                                            label={inputField.label}
+                                            placeholder={inputField.placeholder}
+                                            InputLabelProps={{
+                                            shrink: true,
+                                            }}
+                                            />
+                                }
+                                if (field.type === FormElementType.number) {
+                                    const inputField = field as InputField
+                                    return <TextField
+                                    type = 'number'
+                                    label={inputField.label}
+                                    placeholder={inputField.placeholder}
+                                    />
+                                
+                                }
+                                if (field.type === FormElementType.radio) {
+                                    const radioInputField = field as radioInputField
+                                return <FormControl component="fieldset"> <FormLabel component="legend">{radioInputField.label}</FormLabel>
+                                            <RadioGroup  aria-label="gender" name="gender1"> {radioInputField.values.map((value) => {
+                                            return <FormControlLabel value={value} control={<Radio />} label={value} />
+                                                })}
+                                            </RadioGroup>
+                                        </FormControl>
+                                }
+                                if(field.type === FormElementType.checkbox) {
+                                    const radioInputField = field as radioInputField
+                                return  <FormControl component="fieldset">  <FormLabel component="legend">{radioInputField.label}</FormLabel>
+                                        <FormGroup row> 
+                                            {radioInputField.values.map((value) => {
+                                                return   <FormControlLabel
+                                                label={value}
+                                                control={<Checkbox />}
+                                                value={value}
+                                                /> 
+                                            })}
+                                        </FormGroup>
+                                        </FormControl>
+                                }
+                                })}
+                            </div>
+                    })}        
+            </div>
+            <button>
+                {details.buttonTitle}
+            </button>
+        </div>
+    )
+}
+// Element

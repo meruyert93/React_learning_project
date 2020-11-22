@@ -1,58 +1,46 @@
 .title {
-    text-align: center;
-    color: blue;
+  text-align: center;
+  color: blue;
 }
 
 .containerForm {
-    display: flex;
-    justify-content: center;
-
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .main-form {
-    display: flex;
-    flex-direction: row; 
-    flex-wrap: wrap;
-    width: 40%;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .main-form .MuiTextField-root {
-    color: red;
-    margin: 10px;
-    width: calc(100% - 10px);
-    flex: 1 0 70%;
-    
+  color: red;
+  margin: 10px;
+  width: calc(100% - 10px);
+  flex: 1 0 70%;
 }
 
 .main-form .MuiTextField-root input {
-    color: red;
+  color: red;
 }
 
-
 .main-form .MuiTextField-root label {
-    color: blueviolet;
+  color: blueviolet;
 }
 
 .div-100-width {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width:100%;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
 }
 .inputsforName {
-    display: flex;
-    justify-content: space-around;
-    color: red;
+  display: flex;
+  justify-content: space-around;
+  color: red;
 }
-
-.main-form .MuiFormGroup-root {
-    display: inline-flex;
-    flex-wrap: nowrap;
-}
-
-.main-form .MuiFormControl-root {
-    display: flex;
-    flex-wrap: wrap;
-}  
