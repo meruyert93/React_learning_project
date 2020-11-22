@@ -83,8 +83,7 @@ export enum FormElementType {
     radio = "radio",
     checkbox = "checkbox"
   }
-
-export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
+  export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
 
     const details =  props.formDetails;
     const classes = useStyles();
@@ -205,24 +204,25 @@ export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
         </div>
     )
 }
-
 export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props) => {
     const details =  props.formDetails;
     const classes = useStyles();
     return (
         <div className="div-100-width">
+            <div className="main-title"> 
             <h1 className="title">
                 {details.title}
             </h1>
+            </div>
             <div className="main-form"> 
                 {/* [1, 2, 3, 4]
                 [[1, 2], [3], [4]] */}
                 {details.inputFields.map((row) => {    
-                    return <div style={{display:"flex", margin: "10px", alignItems:"stretch", width: "100%"}}> 
+                    return <div style={{display:"flex", margin: "10px", alignItems:"stretch", width: "80%"}}> 
                                 {row.map((field) => {
                                 if (field.type === FormElementType.text) {
                                     const inputField = field as InputField;
-                                    return <div style={{display: "flex" , width: "40%"}}>
+                                    return <div style={{display: "flex" , width: "80%"}}>
                                                 <TextField
                                                 type='text' 
                                                 label={inputField.label}
@@ -243,7 +243,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                 // TODO add support for input type password
                                 if (field.type === FormElementType.passwordGroup) {
                                     const inputField = field as PasswordGroupField
-                                    return  <div style={{display: "flex", width: "100%"}}>
+                                    return  <div style={{display: "flex", width: "68%"}}>
                                                 <TextField
                                                 type ='password'
                                                 label={inputField.label[0]}
@@ -259,45 +259,53 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                 //Support for input type email
                                 if (field.type === FormElementType.email) {
                                     const inputField = field as InputField
-                                    return <TextField
-                                            type ='email'
-                                            label={inputField.label}
-                                            placeholder={inputField.placeholder}
-                                            />
+                                    return <div style={{display: "flex", width: "50%"}}>
+                                                <TextField
+                                                type ='email'
+                                                label={inputField.label}
+                                                placeholder={inputField.placeholder}
+                                                />
+                                            </div>
                                 }
                                 if  (field.type === FormElementType.date) {
                                     const inputField = field as InputField
-                                    return <TextField
-                                            type = 'date'
-                                            label={inputField.label}
-                                            placeholder={inputField.placeholder}
-                                            InputLabelProps={{
-                                            shrink: true,
-                                            }}
-                                            />
+                                    return <div style={{display: "flex", width: "50%", marginLeft: "25%"}}>
+                                                <TextField
+                                                type = 'date'
+                                                label={inputField.label}
+                                                placeholder={inputField.placeholder}
+                                                InputLabelProps={{
+                                                shrink: true,
+                                                }}
+                                                />
+                                            </div>
                                 }
                                 if (field.type === FormElementType.number) {
                                     const inputField = field as InputField
-                                    return <TextField
-                                    type = 'number'
-                                    label={inputField.label}
-                                    placeholder={inputField.placeholder}
-                                    />
+                                    return <div style={{display: "flex", width: "50%", justifyContent: "center"}}>
+                                                <TextField
+                                                type = 'number'
+                                                label={inputField.label}
+                                                placeholder={inputField.placeholder}
+                                                />
+                                             </div>
                                 
                                 }
                                 if (field.type === FormElementType.radio) {
                                     const radioInputField = field as radioInputField
-                                return <FormControl component="fieldset"> <FormLabel component="legend">{radioInputField.label}</FormLabel>
-                                            <RadioGroup  aria-label="gender" name="gender1"> {radioInputField.values.map((value) => {
-                                            return <FormControlLabel value={value} control={<Radio />} label={value} />
-                                                })}
-                                            </RadioGroup>
-                                        </FormControl>
+                                return <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
+                                            <FormControl component="fieldset"> <FormLabel component="legend">{radioInputField.label}</FormLabel>
+                                                <RadioGroup  aria-label="gender" name="gender1"> {radioInputField.values.map((value) => {
+                                                return <FormControlLabel value={value} control={<Radio />} label={value} />
+                                                    })}
+                                                </RadioGroup>
+                                            </FormControl>
+                                        </div>
                                 }
                                 if(field.type === FormElementType.checkbox) {
                                     const radioInputField = field as radioInputField
-                                return  <FormControl component="fieldset">  <FormLabel component="legend">{radioInputField.label}</FormLabel>
-                                        <FormGroup row> 
+                                return  <div style={{display: "flex", width: "100%", justifyContent: "center"}}><FormControl component="fieldset">  <FormLabel component="legend">{radioInputField.label}</FormLabel>
+                                        <FormGroup row  style={{display: "flex", width: "100%", justifyContent: "center"}}> 
                                             {radioInputField.values.map((value) => {
                                                 return   <FormControlLabel
                                                 label={value}
@@ -307,15 +315,17 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                             })}
                                         </FormGroup>
                                         </FormControl>
+                                         </div>
                                 }
                                 })}
                             </div>
                     })}        
             </div>
-            <button>
+            <div className="submitButton"> 
+            <button  style={{display: "flex", width: "15%", justifyContent: "center"}}>
                 {details.buttonTitle}
             </button>
+            </div>
         </div>
     )
 }
-// Element

@@ -9,7 +9,7 @@ export class ExampleForm extends Component <{}, {}> {
         const nameInputField: InputField = {type: "text", placeholder: "Enter your name", label: "Your name"}
         const firstNameInputField: InputField = {type: "text", placeholder: "Enter your first name", label: "Firstname"}
         const emailInputField: InputField = {type: "email", placeholder: "Enter your email", label: "Email"}
-        const passwordInputField: PasswordGroupField = {type: "password-group", placeholder: "Create your password", label: ["Password", "Confirm password"]}
+        const passwordInputField: PasswordGroupField = {type: "password-group", placeholder: "Create your password", label: ["Password", "Password Confirmation"]}
         const birthDateInputField: InputField = {type: "date", placeholder: "Enter your birth date", label:"Birth date"}
         const phoneNumberInputField: InputField = {type: "number", placeholder: "Enter your phone Number", label:"Phone number"}
         const streetInputField: InputField = {type: "text", placeholder: "Enter your street", label: "Street"}
@@ -19,27 +19,20 @@ export class ExampleForm extends Component <{}, {}> {
         const radio1InputField: InputField = {type: "radio", placeholder: "Female", label:"Female"}
         const radioInputField: radioInputField = {type:"radio", values:['female', 'male', 'others'], label: "Gender" }
         const rating: radioInputField = {type:"radio", values:['yes', 'no', 'maybe later'], label: "Do you want to rate us?" }
-        const checkbox: radioInputField = {type:"checkbox", values: ['yes', 'no'], label: "do you want to follow us?"}
-        const nameForm: FormDescription = {
-            inputFields: 
-            [nameInputField, firstNameInputField, birthDateInputField, passwordInputField, 
-            emailInputField, phoneNumberInputField, 
-            streetInputField, zipCodeInputField, cityCodeInputField, countryCodeInputField, radio1InputField],
-            radioInputFields: [radioInputField, rating, checkbox], 
-            title: "Sign Up", 
-            buttonTitle: "Submit form"}
-
+        const checkbox: radioInputField = {type:"checkbox", values: ['yes', 'no'], label: "do you want to receive more information about us?"}
         const nameFormAsRows: FormDescriptionRow = {
             inputFields: 
             [[nameInputField, firstNameInputField], 
-            [birthDateInputField], 
+            [birthDateInputField],
+            [radioInputField],
+            [passwordInputField],
+            [emailInputField, phoneNumberInputField], 
             [streetInputField, zipCodeInputField, cityCodeInputField, countryCodeInputField], 
-            [birthDateInputField, birthDateInputField]],  
+            [checkbox]],  
             title: "Sign Up", 
             buttonTitle: "Submit form"}
 
         return  <div className="containerForm">
-                        <Form formDetails={nameForm}/>
                         <FormWithRows formDetails={nameFormAsRows}/>
                 </div>
     }
