@@ -1,6 +1,5 @@
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-
 import Box from '@material-ui/core/Box';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
@@ -15,7 +14,14 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import React from 'react'
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
+import VisibilityTwoToneIcon from '@material-ui/icons/VisibilityTwoTone';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import {AccountCircle, LockRounded} from '@material-ui/icons';
 //Styling
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -83,6 +89,7 @@ export enum FormElementType {
     radio = "radio",
     checkbox = "checkbox"
   }
+
   export const Form: React.FC<{formDetails: FormDescription}> = (props) => {
 
     const details =  props.formDetails;
@@ -126,13 +133,25 @@ export enum FormElementType {
                             type ='password'
                             label={inputField.label[0]}
                             placeholder={inputField.placeholder}
+                            InputProps={{
+                            endAdornment: <InputAdornment position="end">
+                            <VisibilityTwoToneIcon/>
+                          </InputAdornment>
+                            }}
                             />
                             <TextField
                             type ='password'
                             label={inputField.label[1]}
                             placeholder={inputField.placeholder}
+                            InputProps={{
+                                endAdornment: (
+                                <InputAdornment position="end">
+                                <VisibilityTwoToneIcon/>
+                                </InputAdornment>
+                                ),
+                                }}
                             />
-                            {/* </FormGroup> */}
+
                         </div>
                     }
                     //Support for input type email
@@ -207,8 +226,9 @@ export enum FormElementType {
 export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props) => {
     const details =  props.formDetails;
     const classes = useStyles();
+    
     return (
-        <div className="div-100-width">
+        <div className="div-80-width">
             <div className="main-title"> 
             <h1 className="title">
                 {details.title}
@@ -245,7 +265,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                     const inputField = field as PasswordGroupField
                                     return  <div style={{display: "flex", width: "68%"}}>
                                                 <TextField
-                                                type ='password'
+                                                type = 'password'
                                                 label={inputField.label[0]}
                                                 placeholder={inputField.placeholder}
                                                 />

@@ -1,18 +1,20 @@
 .title {
-  color: blue;
+  color: blueviolet;
 }
 
 .containerForm {
   display: flex;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: row;
+  margin: 0 auto;
+  background-color: #7E5DC5;
 }
 
 .main-title {
     display: flex;
     justify-content: center;
-    width: 80%;
-    margin-right: 15%;
+    align-items: center;
+    width: 100%;
 }
 
 .main-form {
@@ -25,26 +27,28 @@
 }
 
 .main-form .MuiTextField-root {
-  color: red;
   margin: 10px;
   width: calc(100% - 10px);
   flex: 1 0 70%;
 }
 
 .main-form .MuiTextField-root input {
-  color: red;
+  color:#380f50;
 }
 
 .main-form .MuiTextField-root label {
   color: blueviolet;
 }
 
-.div-100-width {
+.div-80-width {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin: 10px;
+  width: 50%;
+  height: 850px;
+  margin: 20px;
+  background-color: white;
+  align-content: center;
+  border-radius: 100px;
 }
 .inputsforName {
   display: flex;
@@ -55,6 +59,12 @@
 .submitButton {
     display: flex;
     justify-content: center;
-    width: 70%;
-    margin-right:15%
+    width: 100%;
+}
+
+button {
+    background-color: blueviolet;
+    font-size: 25px;
+    border-radius: 25px;
+    color: white;
 }
