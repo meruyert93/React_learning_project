@@ -1,10 +1,6 @@
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -15,13 +11,12 @@ import React from 'react'
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import VisibilityTwoToneIcon from '@material-ui/icons/VisibilityTwoTone';
+import VisibilityOffTwoToneIcon from '@material-ui/icons/VisibilityOffTwoTone';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import {AccountCircle, LockRounded} from '@material-ui/icons';
+import EmailTwoToneIcon from '@material-ui/icons/EmailTwoTone';
+
+
 //Styling
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -107,7 +102,6 @@ export enum FormElementType {
                     if (field.type === FormElementType.text) {
                         const inputField = field as InputField;
                         return <div style={{display: "flex" , width: "40%"}}>
-                  
                         <TextField
                         type='text' 
                         label={inputField.label}
@@ -127,32 +121,26 @@ export enum FormElementType {
                     // TODO add support for input type password
                     if (field.type === FormElementType.passwordGroup) {
                         const inputField = field as PasswordGroupField
-                        return  <div style={{display: "flex", width: "100%"}}>
-                            {/* <FormGroup row>  */}
-                            <TextField
-                            type ='password'
-                            label={inputField.label[0]}
-                            placeholder={inputField.placeholder}
-                            InputProps={{
-                            endAdornment: <InputAdornment position="end">
-                            <VisibilityTwoToneIcon/>
-                          </InputAdornment>
-                            }}
-                            />
-                            <TextField
-                            type ='password'
-                            label={inputField.label[1]}
-                            placeholder={inputField.placeholder}
-                            InputProps={{
-                                endAdornment: (
-                                <InputAdornment position="end">
-                                <VisibilityTwoToneIcon/>
-                                </InputAdornment>
-                                ),
-                                }}
-                            />
-
-                        </div>
+                        return  <div className="password-group" style={{display: "flex", width: "100%"}}>
+                                <TextField
+                                type ='password'
+                                label={inputField.label[0]}
+                                placeholder={inputField.placeholder}
+                                />
+                                <VisibilityTwoToneIcon style={{ fontSize: 50 }} color="primary"/>
+                                <TextField
+                                type ='password'
+                                label={inputField.label[1]}
+                                placeholder={inputField.placeholder}
+                                InputProps={{
+                                    endAdornment: (
+                                    <InputAdornment position="end">
+                                    <VisibilityTwoToneIcon style={{ fontSize: 50 }} color="primary"/>
+                                    </InputAdornment>
+                                    ),
+                                    }}
+                                />
+                            </div>
                     }
                     //Support for input type email
                     if (field.type === FormElementType.email) {
@@ -238,15 +226,15 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                 {/* [1, 2, 3, 4]
                 [[1, 2], [3], [4]] */}
                 {details.inputFields.map((row) => {    
-                    return <div style={{display:"flex", margin: "10px", alignItems:"stretch", width: "80%"}}> 
+                    return <div style={{display:"flex", margin: "10px", alignItems:"stretch", width: "100%"}}> 
                                 {row.map((field) => {
                                 if (field.type === FormElementType.text) {
                                     const inputField = field as InputField;
-                                    return <div style={{display: "flex" , width: "80%"}}>
+                                    return <div style={{display: "flex" , width: "100%"}}>
                                                 <TextField
                                                 type='text' 
-                                                label={inputField.label}
                                                 placeholder={inputField.placeholder}
+                                                label={inputField.label}
                                                 />
                                             </div>
                                 }
@@ -263,27 +251,48 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                 // TODO add support for input type password
                                 if (field.type === FormElementType.passwordGroup) {
                                     const inputField = field as PasswordGroupField
-                                    return  <div style={{display: "flex", width: "68%"}}>
+                                    return  <div style={{display: "flex", width: "67%"}}>
                                                 <TextField
                                                 type = 'password'
                                                 label={inputField.label[0]}
                                                 placeholder={inputField.placeholder}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                    <InputAdornment position="end">
+                                                    <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/>
+                                                    </InputAdornment>
+                                                    ),
+                                                    }}
                                                 />
                                                 <TextField
                                                 type ='password'
                                                 label={inputField.label[1]}
                                                 placeholder={inputField.placeholder}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                    <InputAdornment position="end">
+                                                    <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/>
+                                                    </InputAdornment>
+                                                    ),
+                                                    }}
                                                 />
                                             </div>
                                 }
                                 //Support for input type email
                                 if (field.type === FormElementType.email) {
                                     const inputField = field as InputField
-                                    return <div style={{display: "flex", width: "50%"}}>
+                                    return <div style={{display: "flex", width: "100%"}}>
                                                 <TextField
                                                 type ='email'
                                                 label={inputField.label}
                                                 placeholder={inputField.placeholder}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                    <InputAdornment position="end">
+                                                    <EmailTwoToneIcon style={{ fontSize: 30 }} color="primary"/>
+                                                    </InputAdornment>
+                                                    ),
+                                                    }}
                                                 />
                                             </div>
                                 }
@@ -302,7 +311,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                 }
                                 if (field.type === FormElementType.number) {
                                     const inputField = field as InputField
-                                    return <div style={{display: "flex", width: "50%", justifyContent: "center"}}>
+                                    return <div style={{display: "flex", width: "100%",}}>
                                                 <TextField
                                                 type = 'number'
                                                 label={inputField.label}
@@ -316,7 +325,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                 return <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
                                             <FormControl component="fieldset"> <FormLabel component="legend">{radioInputField.label}</FormLabel>
                                                 <RadioGroup  aria-label="gender" name="gender1"> {radioInputField.values.map((value) => {
-                                                return <FormControlLabel value={value} control={<Radio />} label={value} />
+                                                return <FormControlLabel value={value} control={<Radio color="primary"/>} label={value} />
                                                     })}
                                                 </RadioGroup>
                                             </FormControl>
@@ -329,7 +338,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                             {radioInputField.values.map((value) => {
                                                 return   <FormControlLabel
                                                 label={value}
-                                                control={<Checkbox />}
+                                                control={<Checkbox  color="primary"/>}
                                                 value={value}
                                                 /> 
                                             })}
@@ -342,7 +351,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                     })}        
             </div>
             <div className="submitButton"> 
-            <button  style={{display: "flex", width: "15%", justifyContent: "center"}}>
+            <button  style={{display: "flex", width: "30%", justifyContent: "center"}}>
                 {details.buttonTitle}
             </button>
             </div>
