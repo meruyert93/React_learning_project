@@ -75,10 +75,6 @@ export type radioInputField = {
     label: string;
 }
 
-export type showPasswordHandler = {
-    showPassword: false;
-}
-
 export enum FormElementType {
     text = "text",
     textArea = "text-area",
@@ -91,9 +87,26 @@ export enum FormElementType {
     checkbox = "checkbox", 
   }
 
+  export interface State {
+    showPassword: boolean;
+  }
+
 export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props) => {
     const details =  props.formDetails;
     const classes = useStyles();
+    const[values, setValues] = React.useState<State>({
+        showPassword: false,
+    });
+
+    const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+    };
+    
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
+
+
     
     return (
         <div className="div-80-width">
@@ -133,26 +146,39 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                     const inputField = field as PasswordGroupField
                                     return  <div style={{display: "flex", width: "67%"}}>
                                                 <TextField
-                                                type = 'password'
+                                                type = {values.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[0]}
                                                 placeholder={inputField.placeholder}
                                                 InputProps={{
                                                     endAdornment: (
                                                     <InputAdornment position="end">
-
-                                                    <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/>
+                                                        <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                        edge="end"
+                                                        >
+                                                        {values.showPassword ? <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/> : <VisibilityOffTwoToneIcon style={{ fontSize: 30 }} color="primary"/>}
+                                                        </IconButton>
                                                     </InputAdornment>
                                                     ),
                                                     }}
                                                 />
                                                 <TextField
-                                                type ='password'
+                                                type = {values.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[1]}
                                                 placeholder={inputField.placeholder}
                                                 InputProps={{
                                                     endAdornment: (
                                                     <InputAdornment position="end">
-                                                    <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/>
+                                                        <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                        edge="end"
+                                                        >
+                                                        {values.showPassword ? <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/> : <VisibilityOffTwoToneIcon style={{ fontSize: 30 }} color="primary"/>}
+                                                        </IconButton>
                                                     </InputAdornment>
                                                     ),
                                                     }}
