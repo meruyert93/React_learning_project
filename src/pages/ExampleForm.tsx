@@ -1,6 +1,6 @@
 import '../css/main.css';
 
-import {Form, FormDescription, FormDescriptionRow, FormWithRows, InputField, PasswordGroupField, radioInputField} from "../components/Form"
+import {FormDescriptionRow, FormWithRows, InputField, PasswordGroupField, radioInputField} from "../components/Form";
 import React, { Component } from 'react';
 
 export class ExampleForm extends Component <{}, {}> {
