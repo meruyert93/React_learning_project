@@ -1,23 +1,26 @@
-import Checkbox from '@material-ui/core/Checkbox';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Box from '@material-ui/core/Box';
+import Checkbox from '@material-ui/core/Checkbox';
+import EmailTwoToneIcon from '@material-ui/icons/EmailTwoTone';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import React from 'react'
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import VisibilityTwoToneIcon from '@material-ui/icons/VisibilityTwoTone';
 import VisibilityOffTwoToneIcon from '@material-ui/icons/VisibilityOffTwoTone';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import EmailTwoToneIcon from '@material-ui/icons/EmailTwoTone';
-import IconButton from '@material-ui/core/IconButton';
-
-
+import VisibilityTwoToneIcon from '@material-ui/icons/VisibilityTwoTone';
+import LocationCityTwoToneIcon from '@material-ui/icons/LocationCityTwoTone';
+import PublicTwoToneIcon from '@material-ui/icons/PublicTwoTone';
+import PhoneIphoneTwoToneIcon from '@material-ui/icons/PhoneIphoneTwoTone';
+import CalendarTodayTwoToneIcon from '@material-ui/icons/CalendarTodayTwoTone';
 
 //Styling
 const useStyles = makeStyles((theme: Theme) =>
@@ -61,6 +64,7 @@ export type InputField = {
     type: string; // text, phone, check-box, radio, text-area
     label: string;
     placeholder: string;
+    fieldType: string | undefined; //name, street, zipcode
 }
 
 export type PasswordGroupField = {
@@ -106,7 +110,21 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
         event.preventDefault();
     };
 
-
+    const iconForInputField = (inputField: InputField) => {
+        if (inputField.fieldType === "name" || inputField.fieldType === "first-name") {
+            return <AccountCircleIcon style={{ fontSize: 30 }} color="primary"/>
+        }
+        if (inputField.fieldType === "city") {
+            return <LocationCityTwoToneIcon style={{ fontSize: 30 }} color="primary"/>
+        }
+        if (inputField.fieldType === "country") {
+            return <PublicTwoToneIcon style={{ fontSize: 30 }} color="primary"/>
+        }
+        if (inputField.fieldType === "phone") {
+            return <PhoneIphoneTwoToneIcon style={{ fontSize: 30 }} color="primary"/>
+        }
+            return <div/>
+    }
     
     return (
         <div className="div-80-width">
@@ -128,6 +146,13 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                 type='text' 
                                                 placeholder={inputField.placeholder}
                                                 label={inputField.label}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        {iconForInputField(inputField)}
+                                                    </InputAdornment>
+                                                    ),
+                                                    }}
                                                 />
                                             </div>
                                 }
@@ -223,6 +248,13 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                 type = 'number'
                                                 label={inputField.label}
                                                 placeholder={inputField.placeholder}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        {iconForInputField(inputField)}
+                                                    </InputAdornment>
+                                                    ),
+                                                    }}
                                                 />
                                              </div>
                                 
