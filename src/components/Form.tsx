@@ -1,8 +1,12 @@
+import 'date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Box from '@material-ui/core/Box';
+import CalendarTodayTwoToneIcon from '@material-ui/icons/CalendarTodayTwoTone';
 import Checkbox from '@material-ui/core/Checkbox';
+import DateFnsUtils from '@date-io/date-fns';
 import EmailTwoToneIcon from '@material-ui/icons/EmailTwoTone';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -10,6 +14,9 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import LocationCityTwoToneIcon from '@material-ui/icons/LocationCityTwoTone';
+import PhoneIphoneTwoToneIcon from '@material-ui/icons/PhoneIphoneTwoTone';
+import PublicTwoToneIcon from '@material-ui/icons/PublicTwoTone';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import React from 'react'
@@ -17,10 +24,6 @@ import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import VisibilityOffTwoToneIcon from '@material-ui/icons/VisibilityOffTwoTone';
 import VisibilityTwoToneIcon from '@material-ui/icons/VisibilityTwoTone';
-import LocationCityTwoToneIcon from '@material-ui/icons/LocationCityTwoTone';
-import PublicTwoToneIcon from '@material-ui/icons/PublicTwoTone';
-import PhoneIphoneTwoToneIcon from '@material-ui/icons/PhoneIphoneTwoTone';
-import CalendarTodayTwoToneIcon from '@material-ui/icons/CalendarTodayTwoTone';
 
 //Styling
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,6 +68,7 @@ export type InputField = {
     label: string;
     placeholder: string;
     fieldType: string | undefined; //name, street, zipcode
+    // mandatory: boolean;
 }
 
 export type PasswordGroupField = {
@@ -78,7 +82,7 @@ export type radioInputField = {
     values: string[];
     label: string;
 }
-
+ 
 export enum FormElementType {
     text = "text",
     textArea = "text-area",
@@ -89,15 +93,22 @@ export enum FormElementType {
     number = "number",
     radio = "radio",
     checkbox = "checkbox", 
+    datePicker = "date-picker"
   }
 
-  export interface State {
+export interface State {
     showPassword: boolean;
   }
 
 export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props) => {
     const details =  props.formDetails;
     const classes = useStyles();
+
+    const [password, setPassword] = React.useState("");
+    const [passwordConfirmation, setPasswordConfirmation] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    
+
     const[values, setValues] = React.useState<State>({
         showPassword: false,
     });
@@ -125,7 +136,35 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
         }
             return <div/>
     }
+
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>(
+        new Date(),
+      );
     
+    const handleDateChange = (date: Date | null) => {
+        console.log(date);
+        setSelectedDate(date);
+    };
+  
+    const [text, setText] = React.useState<string>();
+
+    const [error, setErrors] = React.useState<{ text: string}>();
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {target: {value } } = event;
+        setErrors({text:  ''})
+        setText(value);
+    };
+
+    const checkPasswords = () => {
+        if (password === passwordConfirmation) {
+            console.log("Ok!")
+        }
+        else {
+            console.log("Not a match")
+        }
+    }
+
     return (
         <div className="div-80-width">
             <div className="main-title"> 
@@ -143,6 +182,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                     const inputField = field as InputField;
                                     return <div style={{display: "flex" , width: "100%"}}>
                                                 <TextField
+                                                error
                                                 type='text' 
                                                 placeholder={inputField.placeholder}
                                                 label={inputField.label}
@@ -153,6 +193,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                     </InputAdornment>
                                                     ),
                                                     }}
+                                                helperText="Incorrect entry."
                                                 />
                                             </div>
                                 }
@@ -174,6 +215,8 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                 type = {values.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[0]}
                                                 placeholder={inputField.placeholder}
+                                                value={password}
+                                                onChange={(event)=> {console.log(password); setPassword(event.target.value)}}
                                                 InputProps={{
                                                     endAdornment: (
                                                     <InputAdornment position="end">
@@ -193,6 +236,8 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                 type = {values.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[1]}
                                                 placeholder={inputField.placeholder}
+                                                value={passwordConfirmation}
+                                                onChange={(event)=> {setPasswordConfirmation(event.target.value)}}
                                                 InputProps={{
                                                     endAdornment: (
                                                     <InputAdornment position="end">
@@ -215,9 +260,13 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                     const inputField = field as InputField
                                     return <div style={{display: "flex", width: "100%"}}>
                                                 <TextField
+                                                error
+                                                helperText="This field is required"
                                                 type ='email'
                                                 label={inputField.label}
                                                 placeholder={inputField.placeholder}
+                                                onChange={(event)=> {setEmail(event.target.value)}}
+                                                value={email}
                                                 InputProps={{
                                                     endAdornment: (
                                                     <InputAdornment position="end">
@@ -228,17 +277,30 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                 />
                                             </div>
                                 }
-                                if  (field.type === FormElementType.date) {
+                                if  (field.type === FormElementType.datePicker) {
                                     const inputField = field as InputField
                                     return <div style={{display: "flex", width: "50%", marginLeft: "25%"}}>
-                                                <TextField
+                                                {/* <TextField
                                                 type = 'date'
                                                 label={inputField.label}
                                                 placeholder={inputField.placeholder}
                                                 InputLabelProps={{
                                                 shrink: true,
-                                                }}
+                                                }} 
+                                                />*/}
+                                                <MuiPickersUtilsProvider utils={DateFnsUtils}> 
+                                                <KeyboardDatePicker
+                                                    label={inputField.label}
+                                                    // format="MM/dd/yyyy"
+                                                    value={selectedDate}
+                                                    // onChange={() => console.log("test")}
+                                                    onChange={handleDateChange}
+                                                    // onAccept={(date) => handleDateChange(date)}
+                                                    // KeyboardButtonProps={{
+                                                    // 'aria-label': 'change date',
+                                                    // }}
                                                 />
+                                                </MuiPickersUtilsProvider>
                                             </div>
                                 }
                                 if (field.type === FormElementType.number) {
@@ -290,7 +352,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                     })}        
             </div>
             <div className="submitButton"> 
-            <button  style={{display: "flex", width: "30%", justifyContent: "center"}}>
+            <button  style={{display: "flex", width: "30%", justifyContent: "center"}} onClick={() => checkPasswords()}>
                 {details.buttonTitle}
             </button>
             </div>
