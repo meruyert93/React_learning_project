@@ -3,7 +3,6 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import Box from '@material-ui/core/Box';
 import CalendarTodayTwoToneIcon from '@material-ui/icons/CalendarTodayTwoTone';
 import Checkbox from '@material-ui/core/Checkbox';
 import DateFnsUtils from '@date-io/date-fns';
@@ -24,6 +23,7 @@ import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import VisibilityOffTwoToneIcon from '@material-ui/icons/VisibilityOffTwoTone';
 import VisibilityTwoToneIcon from '@material-ui/icons/VisibilityTwoTone';
+import Icon from "@material-ui/core/Icon";
 
 //Styling
 const useStyles = makeStyles((theme: Theme) =>
@@ -103,15 +103,16 @@ export interface State {
 export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props) => {
     const details =  props.formDetails;
     const classes = useStyles();
-
     const [password, setPassword] = React.useState("");
     const [passwordConfirmation, setPasswordConfirmation] = React.useState("");
     const [email, setEmail] = React.useState("");
-    
-
-    const[values, setValues] = React.useState<State>({
+    const [values, setValues] = React.useState<State>({
         showPassword: false,
-    });
+        });
+
+    const [errorsPassword, setErrorsPassword] = React.useState(false);
+    const [errorsEmail, setErrorsEmail] = React.useState(false);
+    const [errorsDate, setErrorsDate] = React.useState(false);
 
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
@@ -146,23 +147,37 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
         setSelectedDate(date);
     };
   
-    const [text, setText] = React.useState<string>();
-
-    const [error, setErrors] = React.useState<{ text: string}>();
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {target: {value } } = event;
-        setErrors({text:  ''})
-        setText(value);
-    };
-
     const checkPasswords = () => {
         if (password === passwordConfirmation) {
-            console.log("Ok!")
+            return (
+            setErrorsPassword(false));
         }
         else {
-            console.log("Not a match")
+            return (setErrorsPassword(true));
         }
+    }
+
+    const checkEmail = () => {
+        if (email === "") {
+            return (
+                setErrorsEmail(true));
+        } else {
+            return (setErrorsEmail(false));
+        }
+    };
+
+    const checkDate = () => {
+        if(selectedDate === null) {
+            return (setErrorsDate(true))
+        } else {
+            return (setErrorsDate(false))
+        }
+    }
+
+    const submitButton = () => {
+        checkPasswords();
+        checkEmail();
+        checkDate();
     }
 
     return (
@@ -182,7 +197,6 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                     const inputField = field as InputField;
                                     return <div style={{display: "flex" , width: "100%"}}>
                                                 <TextField
-                                                error
                                                 type='text' 
                                                 placeholder={inputField.placeholder}
                                                 label={inputField.label}
@@ -193,7 +207,6 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                     </InputAdornment>
                                                     ),
                                                     }}
-                                                helperText="Incorrect entry."
                                                 />
                                             </div>
                                 }
@@ -212,11 +225,14 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                     const inputField = field as PasswordGroupField
                                     return  <div style={{display: "flex", width: "67%"}}>
                                                 <TextField
+                                                error={errorsPassword}
                                                 type = {values.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[0]}
                                                 placeholder={inputField.placeholder}
                                                 value={password}
-                                                onChange={(event)=> {console.log(password); setPassword(event.target.value)}}
+                                                required={true}
+                                                onChange={(event)=> {setPassword(event.target.value)}}
+                                                helperText={errorsPassword ? 'The password did not match ' : ''}
                                                 InputProps={{
                                                     endAdornment: (
                                                     <InputAdornment position="end">
@@ -233,11 +249,14 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                     }}
                                                 />
                                                 <TextField
+                                                error={errorsPassword}
                                                 type = {values.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[1]}
                                                 placeholder={inputField.placeholder}
                                                 value={passwordConfirmation}
+                                                required={true}
                                                 onChange={(event)=> {setPasswordConfirmation(event.target.value)}}
+                                                helperText={errorsPassword ? 'The password did not match ' : ''}
                                                 InputProps={{
                                                     endAdornment: (
                                                     <InputAdornment position="end">
@@ -260,10 +279,11 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                     const inputField = field as InputField
                                     return <div style={{display: "flex", width: "100%"}}>
                                                 <TextField
-                                                error
-                                                helperText="This field is required"
+                                                error={errorsEmail}
+                                                helperText={errorsEmail ? 'The field is required ' : ''}
                                                 type ='email'
                                                 label={inputField.label}
+                                                required={true}
                                                 placeholder={inputField.placeholder}
                                                 onChange={(event)=> {setEmail(event.target.value)}}
                                                 value={email}
@@ -280,25 +300,16 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                 if  (field.type === FormElementType.datePicker) {
                                     const inputField = field as InputField
                                     return <div style={{display: "flex", width: "50%", marginLeft: "25%"}}>
-                                                {/* <TextField
-                                                type = 'date'
-                                                label={inputField.label}
-                                                placeholder={inputField.placeholder}
-                                                InputLabelProps={{
-                                                shrink: true,
-                                                }} 
-                                                />*/}
                                                 <MuiPickersUtilsProvider utils={DateFnsUtils}> 
                                                 <KeyboardDatePicker
+                                                    error={errorsDate}
+                                                    helperText={errorsDate ? 'The field is required ' : ''}
+                                                    fullWidth
                                                     label={inputField.label}
-                                                    // format="MM/dd/yyyy"
+                                                    format="MM/dd/yyyy"
                                                     value={selectedDate}
-                                                    // onChange={() => console.log("test")}
                                                     onChange={handleDateChange}
-                                                    // onAccept={(date) => handleDateChange(date)}
-                                                    // KeyboardButtonProps={{
-                                                    // 'aria-label': 'change date',
-                                                    // }}
+                                                    keyboardIcon={<Icon><CalendarTodayTwoToneIcon style={{ fontSize: 25 }} color="primary"/></Icon>}
                                                 />
                                                 </MuiPickersUtilsProvider>
                                             </div>
@@ -352,7 +363,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                     })}        
             </div>
             <div className="submitButton"> 
-            <button  style={{display: "flex", width: "30%", justifyContent: "center"}} onClick={() => checkPasswords()}>
+            <button  style={{display: "flex", width: "30%", justifyContent: "center"}} onClick={() => submitButton  ()}>
                 {details.buttonTitle}
             </button>
             </div>
