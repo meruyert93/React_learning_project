@@ -1,5 +1,6 @@
 import 'date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -10,7 +11,9 @@ import EmailTwoToneIcon from '@material-ui/icons/EmailTwoTone';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
+import Icon from "@material-ui/core/Icon";
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import LocationCityTwoToneIcon from '@material-ui/icons/LocationCityTwoTone';
@@ -23,7 +26,9 @@ import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import VisibilityOffTwoToneIcon from '@material-ui/icons/VisibilityOffTwoTone';
 import VisibilityTwoToneIcon from '@material-ui/icons/VisibilityTwoTone';
-import Icon from "@material-ui/core/Icon";
+
+import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
+import CheckCircleTwoToneIcon from '@material-ui/icons/CheckCircleTwoTone';
 
 //Styling
 const useStyles = makeStyles((theme: Theme) =>
@@ -110,9 +115,11 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
         showPassword: false,
         });
 
-    const [errorsPassword, setErrorsPassword] = React.useState(false);
+    const [errorsPassword, setErrorsPassword] = React.useState(''); ///that should be string 
     const [errorsEmail, setErrorsEmail] = React.useState(false);
     const [errorsDate, setErrorsDate] = React.useState(false);
+    const [passwordHelperText, setPasswordHelperText] = React.useState('');
+    const [iconForPasswordHelperText, setIconForPasswordHelperText] = React.useState<boolean>(true);
 
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
@@ -141,19 +148,47 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(
         new Date(),
       );
+
+    const [didDateChange, setDidDateChange] = React.useState(false);
     
     const handleDateChange = (date: Date | null) => {
         console.log(date);
         setSelectedDate(date);
+        setDidDateChange(true);
     };
   
     const checkPasswords = () => {
-        if (password === passwordConfirmation) {
-            return (
-            setErrorsPassword(false));
+        if (password === '') {
+            setErrorsPassword('This field is required');
+            return false
+        }
+        if (password !== passwordConfirmation) {
+            setErrorsPassword('Password dont match');
+            return false
         }
         else {
-            return (setErrorsPassword(true));
+            setErrorsPassword('')
+            return true;
+        }
+    }
+
+    const checkPasswordStrength = (event: any) => {
+        let regStrength = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])").test(event.target.value);
+        let regLength = new RegExp("(?=.{8,})").test(event.target.value);
+        if (!regStrength) {   
+            setPasswordHelperText('Your password must contain at least 1 lowercase, 1 uppercase, 1 numeric and 1 special character')
+            setIconForPasswordHelperText(false);
+            return false
+        }
+        if (!regLength) {
+            setPasswordHelperText('Your password must be at least eight characters or longer')
+            setIconForPasswordHelperText(false);
+            return false
+        }
+        else {
+            setPasswordHelperText('');
+            setIconForPasswordHelperText(true);
+            return true
         }
     }
 
@@ -167,10 +202,12 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
     };
 
     const checkDate = () => {
-        if(selectedDate === null) {
-            return (setErrorsDate(true))
+        if(didDateChange === false) {
+                setErrorsDate(true)
+                return true
         } else {
-            return (setErrorsDate(false))
+                setErrorsDate(false)
+                return false
         }
     }
 
@@ -223,16 +260,17 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                 // TODO add support for input type password
                                 if (field.type === FormElementType.passwordGroup) {
                                     const inputField = field as PasswordGroupField
-                                    return  <div style={{display: "flex", width: "67%"}}>
+                                    return  <div className="passwordAndHelperText">
+                                                <div className="passwordGroup"> 
                                                 <TextField
-                                                error={errorsPassword}
+                                                error={errorsPassword.length > 0 ? true : false}
                                                 type = {values.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[0]}
                                                 placeholder={inputField.placeholder}
                                                 value={password}
                                                 required={true}
-                                                onChange={(event)=> {setPassword(event.target.value)}}
-                                                helperText={errorsPassword ? 'The password did not match ' : ''}
+                                                onChange={(event)=> {checkPasswordStrength(event); setPassword(event.target.value)}}
+                                                helperText={errorsPassword}
                                                 InputProps={{
                                                     endAdornment: (
                                                     <InputAdornment position="end">
@@ -249,14 +287,14 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                     }}
                                                 />
                                                 <TextField
-                                                error={errorsPassword}
+                                                error={errorsPassword.length > 0 ? true : false}
                                                 type = {values.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[1]}
                                                 placeholder={inputField.placeholder}
                                                 value={passwordConfirmation}
                                                 required={true}
                                                 onChange={(event)=> {setPasswordConfirmation(event.target.value)}}
-                                                helperText={errorsPassword ? 'The password did not match ' : ''}
+                                                // helperText={errorsPassword}
                                                 InputProps={{
                                                     endAdornment: (
                                                     <InputAdornment position="end">
@@ -272,6 +310,13 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                     ),
                                                     }}
                                                 />
+                                                </div>
+                                                <div className="passwordHelperText">
+                                                <FormHelperText className="formHelperText">
+                                                            {iconForPasswordHelperText ? <div></div> : <WarningTwoToneIcon/>}
+                                                             {passwordHelperText}   
+                                                </FormHelperText>
+                                                </div>
                                             </div>
                                 }
                                 //Support for input type email

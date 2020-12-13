@@ -68,3 +68,26 @@ button {
     border-radius: 25px;
     color: white;
 }
+
+.passwordAndHelperText {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    flex-direction: row;   
+}
+
+.passwordGroup {
+    display:flex;
+    width: 67%;
+}
+
+.passwordHelperText {
+    display: flex;
+    width: 100%;
+    margin-left: 2em;
+}
+.formHelperText {
+    display: flex;
+    align-items: flex-end;
+}
+
