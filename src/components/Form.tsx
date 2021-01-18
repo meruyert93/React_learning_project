@@ -1,8 +1,6 @@
 import 'date-fns';
 
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CalendarTodayTwoToneIcon from '@material-ui/icons/CalendarTodayTwoTone';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -28,28 +26,6 @@ import VisibilityOffTwoToneIcon from '@material-ui/icons/VisibilityOffTwoTone';
 import VisibilityTwoToneIcon from '@material-ui/icons/VisibilityTwoTone';
 
 import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
-import CheckCircleTwoToneIcon from '@material-ui/icons/CheckCircleTwoTone';
-
-//Styling
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        container: {
-            display: 'flex',
-            flexWrap: 'wrap',
-        },
-        textField: {
-            marginLeft: theme.spacing(1),
-            marginRight: theme.spacing(1),
-            width: 200,
-        },
-        root: {
-            '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-            width: '25ch',
-            },
-        },
-    }),
-);
 
 export type FormDescription = {
     inputFields: Field[];
@@ -101,17 +77,22 @@ export enum FormElementType {
     datePicker = "date-picker"
   }
 
+export enum PasswordHintTextState {
+    initial,
+    success,
+    error
+}
+
 export interface State {
     showPassword: boolean;
   }
 
 export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props) => {
     const details =  props.formDetails;
-    const classes = useStyles();
     const [password, setPassword] = React.useState("");
     const [passwordConfirmation, setPasswordConfirmation] = React.useState("");
     const [email, setEmail] = React.useState("");
-    const [values, setValues] = React.useState<State>({
+    const [showPassword, setShowPassWord] = React.useState<State>({
         showPassword: false,
         });
 
@@ -119,10 +100,10 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
     const [errorsEmail, setErrorsEmail] = React.useState(false);
     const [errorsDate, setErrorsDate] = React.useState(false);
     const [passwordHelperText, setPasswordHelperText] = React.useState('');
-    const [iconForPasswordHelperText, setIconForPasswordHelperText] = React.useState<boolean>(true);
+    const [iconForPasswordHelperText, setIconForPasswordHelperText] = React.useState(PasswordHintTextState.initial);
 
     const handleClickShowPassword = () => {
-        setValues({ ...values, showPassword: !values.showPassword });
+        setShowPassWord({ ...showPassword, showPassword: !showPassword.showPassword });
     };
     
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -177,18 +158,30 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
         let regLength = new RegExp("(?=.{8,})").test(event.target.value);
         if (!regStrength) {   
             setPasswordHelperText('Your password must contain at least 1 lowercase, 1 uppercase, 1 numeric and 1 special character')
-            setIconForPasswordHelperText(false);
+            setIconForPasswordHelperText(PasswordHintTextState.error);
             return false
         }
         if (!regLength) {
             setPasswordHelperText('Your password must be at least eight characters or longer')
-            setIconForPasswordHelperText(false);
+            setIconForPasswordHelperText(PasswordHintTextState.error);
             return false
         }
         else {
             setPasswordHelperText('');
-            setIconForPasswordHelperText(true);
+            setIconForPasswordHelperText(PasswordHintTextState.success);
             return true
+        }
+    }
+
+    const iconForPasswordHint = () => {
+        if (iconForPasswordHelperText === PasswordHintTextState.initial) {
+            return <div/>
+        } 
+        if (iconForPasswordHelperText === PasswordHintTextState.error) {
+            return  <WarningTwoToneIcon/>
+        }
+        if (iconForPasswordHelperText === PasswordHintTextState.success) {
+            return <div/> 
         }
     }
 
@@ -228,11 +221,11 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                 {/* [1, 2, 3, 4]
                 [[1, 2], [3], [4]] */}
                 {details.inputFields.map((row) => {    
-                    return <div style={{display:"flex", margin: "10px", alignItems:"stretch", width: "100%"}}> 
+                    return <div style={{display:"flex", margin: "10px", alignItems:"stretch", width: "100%"}} key={Math.random()}> 
                                 {row.map((field) => {
                                 if (field.type === FormElementType.text) {
                                     const inputField = field as InputField;
-                                    return <div style={{display: "flex" , width: "100%"}}>
+                                    return <div style={{display: "flex" , width: "100%"}} key={Math.random()}>
                                                 <TextField
                                                 type='text' 
                                                 placeholder={inputField.placeholder}
@@ -263,8 +256,8 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                     return  <div className="passwordAndHelperText">
                                                 <div className="passwordGroup"> 
                                                 <TextField
-                                                error={errorsPassword.length > 0 ? true : false}
-                                                type = {values.showPassword ? 'text' : 'password'}
+                                                error={errorsPassword.length > 0}
+                                                type = {showPassword.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[0]}
                                                 placeholder={inputField.placeholder}
                                                 value={password}
@@ -280,15 +273,15 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                         onMouseDown={handleMouseDownPassword}
                                                         edge="end"
                                                         >
-                                                        {values.showPassword ? <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/> : <VisibilityOffTwoToneIcon style={{ fontSize: 30 }} color="primary"/>}
+                                                        {showPassword.showPassword ? <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/> : <VisibilityOffTwoToneIcon style={{ fontSize: 30 }} color="primary"/>}
                                                         </IconButton>
                                                     </InputAdornment>
                                                     ),
                                                     }}
                                                 />
                                                 <TextField
-                                                error={errorsPassword.length > 0 ? true : false}
-                                                type = {values.showPassword ? 'text' : 'password'}
+                                                error={errorsPassword.length > 0}
+                                                type = {showPassword.showPassword ? 'text' : 'password'}
                                                 label={inputField.label[1]}
                                                 placeholder={inputField.placeholder}
                                                 value={passwordConfirmation}
@@ -304,7 +297,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                         onMouseDown={handleMouseDownPassword}
                                                         edge="end"
                                                         >
-                                                        {values.showPassword ? <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/> : <VisibilityOffTwoToneIcon style={{ fontSize: 30 }} color="primary"/>}
+                                                        {showPassword.showPassword ? <VisibilityTwoToneIcon style={{ fontSize: 30 }} color="primary"/> : <VisibilityOffTwoToneIcon style={{ fontSize: 30 }} color="primary"/>}
                                                         </IconButton>
                                                     </InputAdornment>
                                                     ),
@@ -313,7 +306,8 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                 </div>
                                                 <div className="passwordHelperText">
                                                 <FormHelperText className="formHelperText">
-                                                            {iconForPasswordHelperText ? <div></div> : <WarningTwoToneIcon/>}
+                                                            {iconForPasswordHint()}
+                                                            {/* {iconForPasswordHelperText === PasswordHintTextState.success ? <CheckCircleTwoToneIcon/> : <WarningTwoToneIcon/>} */}
                                                              {passwordHelperText}   
                                                 </FormHelperText>
                                                 </div>
@@ -397,6 +391,7 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                 label={value}
                                                 control={<Checkbox  color="primary"/>}
                                                 value={value}
+                                                key={Math.random()}
                                                 /> 
                                             })}
                                         </FormGroup>
