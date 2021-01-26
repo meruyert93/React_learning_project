@@ -175,13 +175,13 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
 
     const iconForPasswordHint = () => {
         if (iconForPasswordHelperText === PasswordHintTextState.initial) {
-            return <div/>
+            return null
         } 
         if (iconForPasswordHelperText === PasswordHintTextState.error) {
             return  <WarningTwoToneIcon/>
         }
         if (iconForPasswordHelperText === PasswordHintTextState.success) {
-            return <div/> 
+            return null
         }
     }
 
@@ -305,11 +305,11 @@ export const FormWithRows: React.FC<{formDetails: FormDescriptionRow}> = (props)
                                                 />
                                                 </div>
                                                 <div className="passwordHelperText">
-                                                <FormHelperText className="formHelperText">
+                                                     <FormHelperText className="formHelperText">
                                                             {iconForPasswordHint()}
                                                             {/* {iconForPasswordHelperText === PasswordHintTextState.success ? <CheckCircleTwoToneIcon/> : <WarningTwoToneIcon/>} */}
-                                                             {passwordHelperText}   
-                                                </FormHelperText>
+                                                              {passwordHelperText}    
+                                                 </FormHelperText> 
                                                 </div>
                                             </div>
                                 }
